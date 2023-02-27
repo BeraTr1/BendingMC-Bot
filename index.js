@@ -1,23 +1,10 @@
 const { Client, IntentsBitField, Partials, Events } = require('discord.js'); //
-const { REST, Routes } = require('discord.js'); //
 const token = process.env['TOKEN'];
 const keepAlive = require("./server.js");
 const fs = require('node:fs'); //
 const path = require('node:path'); //
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
-
-client.commands = new Collection(); //
-const commandsPath = path.join(__dirname, 'commands'); //
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js')); //
-
-for (const file of commandFiles) { //
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	if ('data' in command && 'execute' in command) {
-		client.commands.set(command.data.name, command);
-	}
-}
 
 const client = new Client({
 	intents: [
@@ -33,6 +20,18 @@ const client = new Client({
 		Partials.Reaction
 	]
 });
+
+client.commands = new Collection(); //
+const commandsPath = path.join(__dirname, 'commands'); //
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js')); //
+
+for (const file of commandFiles) { //
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	}
+}
 
 // Debug message event listener
 client.on(Events.MessageCreate, msg =>{
