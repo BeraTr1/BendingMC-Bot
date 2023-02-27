@@ -34,7 +34,14 @@ suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
-space.pingCommand(SlashCommandBuilder);
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('ping')
+		.setDescription('Provides information about the ping.'),
+	async execute(interaction) {
+		await interaction.reply(`pong!`);
+	},
+};
 
 // Important bot stuff
 keepAlive();

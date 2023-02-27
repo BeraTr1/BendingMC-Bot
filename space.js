@@ -6,12 +6,3 @@ exports.ping = (client, Events) =>{
         }
     })
 }
-
-exports.pingCommand = (SlashCommandBuilder) => {
-    command = {
-        data: new SlashCommandBuilder().setName("ping").setDescription("New ping command"),
-        async execute(interaction) {
-            await interaction.reply("pong!");
-        }
-    }
-}
