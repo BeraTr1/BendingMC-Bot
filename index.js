@@ -1,7 +1,23 @@
-const { Client, IntentsBitField, Partials, Events, SlashCommandBuilder } = require('discord.js');
+const { Client, IntentsBitField, Partials, Events, REST, Routes } = require('discord.js');
 const keepAlive = require("./server.js");
+const fs = require('node:fs');
+const path = require('node:path');
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
+
+const rest = new REST(({ version: '10' }).setToken(token))
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	}
+}
 
 const client = new Client({
 	intents: [
@@ -34,18 +50,16 @@ suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('Provides information about the ping.'),
-	async execute(interaction) {
-		await interaction.reply(`pong!`);
-	},
-};
+async () =>{
+	const data = await rest.put(Routes.applicationCommands(client.id), {body: commands})
+}
 
 client.on(Events.InteractionCreate, async interaction =>{
 	if (!interaction.isChatInputCommand()) return;
-	await interaction.execute(interaction);
+
+	const command = interaction.client.commands.get(interaction.commandName);
+
+	await command.execute(interaction);
 })
 
 // Important bot stuff
