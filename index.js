@@ -1,4 +1,4 @@
-const { Client, IntentsBitField, Partials, Events } = require('discord.js');
+const { Client, IntentsBitField, Partials, Events, SlashCommandBuilder } = require('discord.js');
 const keepAlive = require("./server.js");
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
@@ -33,6 +33,8 @@ client.on(Events.MessageCreate, msg =>{
 suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
+
+space.pingCommand(SlashCommandBuilder);
 
 // Important bot stuff
 keepAlive();
