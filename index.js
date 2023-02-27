@@ -7,10 +7,7 @@ const path = require('node:path'); //
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 
-const rest = new REST(({ version: '10' }).setToken(token)) //
 client.commands = new Collection(); //
-const commands = []; //
-
 const commandsPath = path.join(__dirname, 'commands'); //
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js')); //
 
@@ -58,14 +55,24 @@ async () =>{ //
 	console.log(data.length)
 }
 
-client.on(Events.InteractionCreate, async interaction =>{ //
-	console.log("New interaction!");
+client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
-	const command = interaction.client.commands.get(interaction.commandName);
+	const command = client.commands.get(interaction.commandName);
 
-	await command.execute(interaction);
-})
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	}
+});
 
 // Important bot stuff
 keepAlive();
