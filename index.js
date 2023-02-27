@@ -1,4 +1,6 @@
-const { Client, IntentsBitField, Partials, Events, REST, Routes } = require('discord.js'); //
+const { Client, IntentsBitField, Partials, Events } = require('discord.js'); //
+const { REST, Routes } = require('discord.js'); //
+const token = process.env['TOKEN'];
 const keepAlive = require("./server.js");
 const fs = require('node:fs'); //
 const path = require('node:path'); //
@@ -67,4 +69,4 @@ client.on(Events.InteractionCreate, async interaction =>{ //
 
 // Important bot stuff
 keepAlive();
-client.login(process.env['TOKEN']);
+client.login(token);
