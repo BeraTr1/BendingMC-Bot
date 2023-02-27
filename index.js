@@ -1,10 +1,11 @@
-const { Client, IntentsBitField, Partials, Events } = require('discord.js'); //
+const { Client, IntentsBitField, Partials, Events, Collection } = require('discord.js'); //
 const token = process.env['TOKEN'];
 const keepAlive = require("./server.js");
 const fs = require('node:fs'); //
 const path = require('node:path'); //
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
+const c = require('./commands.js');
 
 const client = new Client({
 	intents: [
@@ -55,6 +56,8 @@ async () =>{ //
 }
 
 client.on(Events.InteractionCreate, async interaction => {
+	console.log("new interaction!")
+	
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);
