@@ -1,17 +1,18 @@
-const { Client, IntentsBitField, Partials, Events, REST, Routes } = require('discord.js');
+const { Client, IntentsBitField, Partials, Events, REST, Routes } = require('discord.js'); //
 const keepAlive = require("./server.js");
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('node:fs'); //
+const path = require('node:path'); //
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 
-const rest = new REST(({ version: '10' }).setToken(token))
-client.commands = new Collection();
+const rest = new REST(({ version: '10' }).setToken(token)) //
+client.commands = new Collection(); //
+const commands = []; //
 
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandsPath = path.join(__dirname, 'commands'); //
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js')); //
 
-for (const file of commandFiles) {
+for (const file of commandFiles) { //
 	const filePath = path.join(commandsPath, file);
 	const command = require(filePath);
 	if ('data' in command && 'execute' in command) {
@@ -50,11 +51,13 @@ suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
-async () =>{
-	const data = await rest.put(Routes.applicationCommands(client.id), {body: commands})
+async () =>{ //
+	const data = await rest.put(Routes.applicationCommands(client.id), {body: commands});
+	console.log(data.length)
 }
 
-client.on(Events.InteractionCreate, async interaction =>{
+client.on(Events.InteractionCreate, async interaction =>{ //
+	console.log("New interaction!");
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
