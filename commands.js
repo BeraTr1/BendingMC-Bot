@@ -1,7 +1,8 @@
 const { REST, Routes } = require('discord.js');
-const { token } = process.env['TOKEN'];
+const token = process.env['TOKEN'];
 const fs = require('node:fs');
 const path = require('node:path');
+const {clientId} = require('./config.json')
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
@@ -23,9 +24,9 @@ const rest = new REST({ version: '10' }).setToken(token);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
-        const data = await rest.put(Routes.applicationCommands(client.id), {body: commands});
+        await rest.put(Routes.applicationCommands(clientId), {body: commands});
 
-		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+		console.log(`Successfully reloaded application (/) commands.`);
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
