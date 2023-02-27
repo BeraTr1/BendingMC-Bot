@@ -43,6 +43,11 @@ module.exports = {
 	},
 };
 
+client.on(Events.InteractionCreate, async interaction =>{
+	if (!interaction.isChatInputCommand()) return;
+	await interaction.execute(interaction);
+})
+
 // Important bot stuff
 keepAlive();
 client.login(process.env['TOKEN']);
